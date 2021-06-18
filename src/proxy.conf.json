@@ -1,0 +1,23 @@
+{
+    "/auth/*": {
+        "target": "https://helm-dev.bhp.com/auth/",
+        "secure": false,
+        "logLevel": "debug"
+    },
+    "/isLoggedIn/*": {
+      "target": "https://helm-dev.bhp.com/auth/isLoggedIn/",
+      "secure": false,
+      "logLevel": "debug"
+  },
+  "/login/*": {
+    "target": "https://helm-dev.bhp.com/auth/login/",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/getRoles/*": {
+    "target": "https://helm-dev.bhp.com/auth/getRoles/",
+    "secure": false,
+    "logLevel": "debug"
+  }
+  }
+  

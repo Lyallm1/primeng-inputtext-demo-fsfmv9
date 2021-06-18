@@ -1,4 +1,208 @@
-body {
-  padding: 2em;
-  font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif, “Apple Color Emoji”, “Segoe UI Emoji”, “Segoe UI Symbol”;
+/* You can add global styles to this file, and also import other style files */
+@import '~primeicons/primeicons.css';
+@import '~primeng/resources/primeng.min.css';
+@import "~leaflet/dist/leaflet.css";
+
+html, body {
+  margin: 0px;
+  overflow: hidden;
+  background-color: #000;
+  font-family: Arial;
+  overflow: hidden;
+}
+.text-label{
+  color: #fff;
+}
+#number {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top:0;
+  left: 0;
+}
+
+.annotation {
+  position: absolute;
+  background: red;
+  width: 50px;
+  height: 50px;
+  top: 0;
+  left: 0;
+}
+.tm {
+position: absolute;
+top: 10px;
+right: 10px;
+}
+
+.webgl-error {
+font: 15px/30px monospace;
+text-align: center;
+color: #fff;
+margin: 50px;
+}
+
+.webgl-error a {
+color: #fff;
+}
+
+.sub_div {
+position: absolute;
+bottom: 0px;
+margin-left: 1000px;
+margin-bottom: 100px;
+}
+
+/* globe-page START */
+.globe-page .right-panel {
+display: none;
+}
+.globe-page #webgl{
+cursor: pointer;
+}
+
+.globe-page #labels {
+position: absolute;
+z-index: 0;
+color: white;
+}
+
+.globe-page #labels>div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: small;
+  user-select: none;
+  padding: 4px 8px;
+  background-color: #111111;
+  font-size: 11px;
+  border-radius: 3px;
+  white-space: nowrap;
+  line-height: 1.5em;
+}
+
+.globe-page #map-legend{
+  bottom: 2.5vw;
+  right: 4vw;
+  position: absolute;
+  z-index: 999;
+  color: white;
+  background-color: rgba(128,128,128, 0.2);
+  padding: 0.5vw;
+  font-size: 12px;
+pointer-events: none;
+}
+
+.globe-page #map-legend div{
+  display: flex;
+  padding: 5px 0px 5px 0px;
+}
+
+.globe-page #map-legend span{
+align-self: center;
+}
+.globe-page #map-legend span{
+align-self: center;
+height: 0.6vw;
+  width: 0.6vw;
+}
+/* globe-page END */
+
+.dialog-content {
+  width: calc(100vw - 62px);
+  height: calc(100vh - 100px);
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  left:0;
+  overflow: hidden;
+}
+
+
+/**************** LEAFLET OVERRIDES *****************/
+/* pop up */
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: #1b1b1b;
+  color: white;
+}
+
+/* tooltip */
+
+.leaflet-tooltip {
+  background: #1b1b1b;
+  color: white;
+  padding: 13px 18px 19px;
+  border-radius: 13px;
+  border: none;
+}
+
+.leaflet-tooltip-top:before {
+  border-top-color: #1b1b1b;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 701; /* so tooltip shows above the popup layer */
+}
+
+/* zoom buttons */
+
+.leaflet-touch .leaflet-bar a:hover {
+  opacity: 85%;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+  border-top-left-radius: 13px;
+  border-top-right-radius: 7px;
+  background-color: #000000ad;
+  color: white;
+  box-shadow: 1px 1px 5px black;
+  border-bottom: none;
+}
+
+.leaflet-touch .leaflet-bar a:last-child {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 13px;
+  background-color: #000000ad;
+  color: white;
+  box-shadow: 1px 1px 5px black;
+}
+
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+  border: none;
+}
+
+/* tile spacing workaround: https://github.com/Leaflet/Leaflet/issues/3575#issuecomment-688644225 */
+
+.leaflet-tile-container img {
+  width: 256.5px !important;
+  height: 256.5px !important;
+}
+
+
+.invalidLogin{
+  font-size: larger;
+  color: red;
+  top: 50%;
+  left: 50%;
+  font-weight: 700;
+}
+
+.form {
+  font: 400 11px 'Helvetica', 'AktivGroteskW01-Regular', 'Roboto', 'Arial', 'sans-serif', 'Trebuchet MS';
+  color: #ffffff;
+  padding-left: 38.8%;
+  padding-right: 38.8%;
+  padding-top: 15%;
+  padding-bottom: 20%;
+  font-size: larger;
+}
+.center{
+  height: 250px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  width: 250px;
+  color: #ffffff;
 }
