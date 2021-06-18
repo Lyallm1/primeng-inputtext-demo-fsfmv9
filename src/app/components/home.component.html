@@ -1,0 +1,91 @@
+<div *ngIf="isLoggedIn && !isLoading; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+  <body>
+    <!-- NAV BAR -->
+    <div id="divHeader">
+      <app-header
+        (getUpdateOpenComponentDictionary)="showComponentDictionary($event)"
+        (helmMapSelected)="showSelectedMap($event)"
+        [helmMaps]="helmMaps"
+        [currentHelmMap]="selectedMap"
+        >
+      </app-header>
+    </div>
+
+    <!-- LEAFLET MAP -->
+    <map
+      [helmMap]="selectedMap"
+      [resetAssetMarkerColor]="!openSideBar"
+      (locationMarkerClicked)="toggleSideBar($event, true)"
+      >
+    </map>
+
+    <!-- SUB APPS -->
+    <!-- Logical Topology -->
+    <p-dialog *ngIf="openLT"
+      id="logical-topology-iframe"
+      [(visible)]="openLT"
+      [positionTop]="55"
+      [positionLeft]="362"
+      [styleClass]="ui-corner-all"
+      [modal]="true"
+      [blockScroll]="false"
+      [dismissableMask]="false">
+        <p-header>Logical Topology</p-header>
+        <app-logical-topology
+        [siteCode]="siteCode"
+        ></app-logical-topology>
+    </p-dialog>
+
+    <!-- Equipment Dictionary -->
+    <p-dialog *ngIf="openComponentDictionary"
+      id="logical-topology-iframe"
+      [(visible)]="openComponentDictionary"
+      [positionTop]="55"
+      [positionLeft]="362"
+      [modal]="true"
+      [blockScroll]="false"
+      [dismissableMask]="false"
+      >
+        <p-header>Equipment Dictionary</p-header>
+        <app-equipment-dictionary></app-equipment-dictionary>
+    </p-dialog>
+  </body>
+
+  <!-- SIDE BAR -->
+  <ng-container *ngIf="openSideBar">
+    <app-side-bar
+      (getUpdateOpenIframe)="showLogicalTopology($event)"
+      (toggleClose)="toggleSideBar($event, false)"
+      [currentAsset]="selectedAsset"
+      [minesites]="minesites">
+    </app-side-bar>
+  </ng-container>
+</ng-template>
+<ng-template #elseBlock>
+  <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="loginForm.form.valid && login()" #loginForm="ngForm" novalidate class="form">
+    <img src="../../../assets/icons/HELM_LOGO_V1.png" alt="Helm" class="logo">
+    <div class="form-group username-field" [ngClass]="{ 'has-error': loginForm.submitted && !username.valid }">
+        <label for="username" style="color: rgb(190, 136, 0)">APAC Username&emsp;</label>
+        <input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
+        <span class="p-ml-2">{{model.username}}</span>
+        <div *ngIf="loginForm.submitted && !username.valid" class="help-block">Username is required</div>
+    </div>
+    <div class="form-group password-field" [ngClass]="{ 'has-error': loginForm.submitted && !password.valid }">
+        <label for="password" style="color: rgb(190, 136, 0)">Password&emsp;&nbsp;&emsp;&nbsp;&emsp;&nbsp;&nbsp;</label>
+        <input type="text" pInputText name="password" [(ngModel)]="model.password" #password="ngModel" required />
+        <div *ngIf="loginForm.submitted && !password.valid" class="help-block">Password is required</div>
+    </div>
+    <div class="form-group login-btn">
+        <button [disabled]="loading" class="btn btn-primary">
+          Login
+        </button>
+    </div>
+    <div class="invalidLogin" *ngIf="failedLogin">Invalid Login.</div>
+  </form>
+  <div *ngIf="isLoading" class="center">
+    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />&nbsp;
+    Authenticating...
+  </div>
+
+</ng-template>

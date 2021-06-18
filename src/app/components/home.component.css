@@ -1,0 +1,35 @@
+/**************************PRIME NG OVERRIDES********************************/
+/** need to use :host ::ng-deep due to view encapsulation****/
+:host ::ng-deep .p-dialog {
+  top: 40%;
+  height: 36%;
+  width: 100%;
+  background-color: rgba(1, 1, 1, 0);
+}
+:host ::ng-deep p-dialog .p-component-overlay {
+  z-index: 0 !important;
+}
+:host ::ng-deep p-dialog .p-dialog-header {
+  background-color: black !important;
+  color: rgb(253, 189, 14) !important;
+  padding: 5px;
+  font-size: 1.05em;
+  font-weight: bold;
+}
+:host ::ng-deep .p-dialog-header-icon {
+  background-color: black !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+}
+:host ::ng-deep .pi {
+  color:  rgb(253, 189, 14) !important;
+  font-size: 1.50em;
+}
+.logo {
+  transform: scale(0.5) translate(-50%, -10%);
+}
+.username-field,
+.password-field,
+.login-btn {
+  transform: translate(15%, -300%);
+}
