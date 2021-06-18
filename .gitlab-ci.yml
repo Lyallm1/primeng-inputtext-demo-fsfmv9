@@ -1,0 +1,79 @@
+image: node:12
+
+stages:
+  - install
+  - build
+  - test
+  - deploy
+
+install-job:
+  tags:
+    - helm
+  stage: install
+  script:
+    - npm config set strict-ssl false
+    - echo $NPM_TOKEN > /root/.npmrc
+    - echo $NPM_HOSTS >> /etc/hosts
+    - npm config set registry $NPM_REGISTRY
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+build-job:
+  tags:
+      - helm
+  stage: build
+  script:
+    - |
+        if [ "$CI_COMMIT_BRANCH" == "prod" ]; then
+          echo "$PROD_ENV" > .env
+        else
+          echo "$DEV_ENV" > .env
+        fi
+    - npm run build
+  dependencies:
+    - install-job
+  artifacts:
+   paths:
+   - dist
+
+lint-job:
+  tags:
+    - helm
+  stage: test
+  allow_failure: true
+  script:
+    - npm run lint -- src/
+  dependencies:
+    - install-job
+
+deploy:
+  tags:
+    - helm
+  stage: deploy
+  only:
+    refs:
+      - tags
+      - develop
+  image: alpine
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $BOT_KEY | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+    - mv dist helm-frontend-build
+    - |
+      if [[ "$CI_COMMIT_BRANCH"  == develop ]]; then
+        export DEST_IP=$DEV_IP
+        echo "dev deploy"
+      else
+        export DEST_IP=$PROD_IP
+        echo "Production deploy"
+      fi
+    - scp -r -oStrictHostKeyChecking=no helm-frontend-build bot_deploy@$DEST_IP:~/
+    - ssh -vvvv -tt -oStrictHostKeyChecking=no bot_deploy@$DEST_IP "sudo rm -rf /opt/helm-dashboard/* && sudo cp -rf helm-frontend-build/helm-dashboard/* /opt/helm-dashboard/ && rm -rf ~/.helm-frontend-build && sudo chown root:root -R /opt/helm-dashboard"
+    - echo 'deployment finished'
